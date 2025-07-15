@@ -1,14 +1,15 @@
-import Image from "next/image";
-
-export default function Home() {
+// vizz-novo/src/app/page.tsx
+export default function HomePage() {
   return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-       
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-       
-      </footer>
-    </div>
-  );
+    <main className="flex min-h-screen flex-col items-center justify-center bg-gray-900 p-24">
+      <div className="bg-white p-10 rounded-lg shadow-2xl text-center">
+        <h1 className="text-4xl font-bold text-blue-600">
+          A Estilização Funcionou!
+        </h1>
+        <p className="mt-4 text-lg text-gray-700">
+          Se você vê esta caixa azul e branca, o Tailwind CSS está funcionando corretamente.
+        </p>
+      </div>
+    </main>
+  )
 }

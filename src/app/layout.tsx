@@ -1,19 +1,23 @@
-import type { Metadata } from "next";
-import "./globals.css";
+// vizz-novo/src/app/layout.tsx
+import type { Metadata } from 'next'
+import { Inter } from 'next/font/google'
+import './globals.css' // Importação essencial
+
+const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: "Óticas Vizz",
-  description: "O melhor preço e qualidade da região!",
-};
+  title: 'Teste de Estilo - Óticas Vizz',
+  description: 'Teste para verificar a estilização do Tailwind CSS',
+}
 
 export default function RootLayout({
   children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+}: {
+  children: React.ReactNode
+}) {
   return (
-    <html lang="en">
-      <body>{children}</body>
+    <html lang="pt-BR">
+      <body className={inter.className}>{children}</body>
     </html>
-  );
+  )
 }
