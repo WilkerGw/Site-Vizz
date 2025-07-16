@@ -16,7 +16,9 @@ export default function AgendamentoPage() {
           <p className="text-sm">Horários de atendimento das 11:00 às 16:00.</p>
         </div>
 
-        <AppointmentForm />
+        <div className="mt-12">
+          <AppointmentForm />
+        </div>
       </div>
     </div>
   );

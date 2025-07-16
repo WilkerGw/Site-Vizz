@@ -2,13 +2,19 @@
 
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import InputMask from 'react-input-mask';
 import { Calendar, Clock, User, Phone, Send } from 'lucide-react';
+import InputMask from 'react-input-mask'; // 1. Importe o componente da máscara
+
+// Constantes da data do evento
+const EVENT_DATE_DISPLAY = "19/07/2025";
+const EVENT_DATE_ISO = "2025-07-19";
 
 const generateTimeSlots = (): string[] => {
   const slots: string[] = [];
-  let currentTime = new Date('2025-07-19T11:00:00');
-  const endTime = new Date('2025-07-19T16:00:00');
+  const startTime = new Date(`${EVENT_DATE_ISO}T11:00:00`);
+  const endTime = new Date(`${EVENT_DATE_ISO}T16:00:00`);
+  
+  let currentTime = startTime;
   while (currentTime <= endTime) {
     slots.push(currentTime.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }));
     currentTime.setMinutes(currentTime.getMinutes() + 30);
@@ -22,26 +28,45 @@ export function AppointmentForm() {
   const [phone, setPhone] = useState('');
   const [selectedTime, setSelectedTime] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState<string | null>(null);
 
   const timeSlots = generateTimeSlots();
-  const appointmentDate = "19/07/2025";
+  
+  // A função handlePhoneChange não é mais necessária! A máscara cuida da formatação.
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
+    setError(null);
+    setSuccess(null);
 
-    if (!selectedTime) {
-      alert('Por favor, selecione um horário.');
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+    if (!apiUrl) {
+      setError("Erro de configuração: A URL da API não foi definida.");
       setIsLoading(false);
       return;
     }
 
+    if (!selectedTime) {
+      setError('Por favor, selecione um horário.');
+      setIsLoading(false);
+      return;
+    }
+
+    // 2. Removemos os caracteres da máscara antes de enviar para o backend.
+    // O backend deve receber apenas os números. Ex: "11987654321"
+    const numericPhone = phone.replace(/\D/g, '');
+
+    const appointmentDateTime = new Date(`${EVENT_DATE_ISO}T${selectedTime}:00`);
+
     const appointmentData = {
-      firstName, lastName, phone, date: '2025-07-19', time: selectedTime,
+      firstName,
+      lastName,
+      phone: numericPhone, // Enviando o telefone limpo
+      dateTime: appointmentDateTime.toISOString(),
     };
     
-    const apiUrl = process.env.NEXT_PUBLIC_API_URL;
-
     try {
       const response = await fetch(`${apiUrl}/agendamentos`, {
         method: 'POST',
@@ -50,16 +75,18 @@ export function AppointmentForm() {
       });
 
       if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || 'Falha ao agendar. Por favor, tente novamente.');
+        const responseData = await response.json();
+        throw new Error(responseData.error || 'Falha ao agendar. Tente novamente.');
       }
+      
+      setSuccess('Agendamento realizado com sucesso!');
+      setFirstName(''); 
+      setLastName(''); 
+      setPhone(''); 
+      setSelectedTime('');
 
-      alert('Agendamento realizado com sucesso!');
-      setFirstName(''); setLastName(''); setPhone(''); setSelectedTime('');
-
-    } catch (error: any) {
-      console.error("Erro ao conectar com o backend:", error);
-      alert(error.message || 'Ocorreu um erro inesperado. Verifique se o servidor backend está rodando.');
+    } catch (err: any) {
+      setError(err.message || 'Ocorreu um erro inesperado.');
     } finally {
       setIsLoading(false);
     }
@@ -73,74 +100,52 @@ export function AppointmentForm() {
       transition={{ duration: 0.7, ease: 'easeOut' }}
     >
       <form onSubmit={handleSubmit} className="space-y-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div>
-            <label htmlFor="firstName" className="flex items-center gap-2 text-sm font-medium text-gray-700"><User size={16} />Nome</label>
-            <input
-              type="text" id="firstName" value={firstName}
-              onChange={(e) => setFirstName(e.target.value)}
-              className="mt-1 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-yellow-500 focus:border-yellow-500"
-              required
-            />
-          </div>
-          <div>
-            <label htmlFor="lastName" className="block text-sm font-medium text-gray-700">Sobrenome</label>
-            <input
-              type="text" id="lastName" value={lastName}
-              onChange={(e) => setLastName(e.target.value)}
-              className="mt-1 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-yellow-500 focus:border-yellow-500"
-              required
-            />
-          </div>
-        </div>
+        {/* ... outros campos do formulário ... */}
+
+        {/* --- CAMPO DE TELEFONE COM MÁSCARA --- */}
         <div>
           <label htmlFor="phone" className="flex items-center gap-2 text-sm font-medium text-gray-700"><Phone size={16} />Telefone / WhatsApp</label>
+          {/* 3. Substituímos o <input> padrão pelo <InputMask> */}
           <InputMask
             mask="(99) 99999-9999"
+            id="phone"
             value={phone}
             onChange={(e) => setPhone(e.target.value)}
-          >
-            {(inputProps: any) => (
-              <input
-                {...inputProps}
-                type="tel"
-                id="phone"
-                placeholder="(11) 99999-8888"
-                className="mt-1 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-yellow-500 focus:border-yellow-500"
-                required
-              />
-            )}
-          </InputMask>
+            className="mt-1 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-yellow-500 focus:border-yellow-500"
+            required
+          />
         </div>
+        
+        {/* ... restante do formulário ... */}
+        
+        {/* Campo de Data Fixa */}
         <div>
           <label htmlFor="date" className="flex items-center gap-2 text-sm font-medium text-gray-700"><Calendar size={16} />Data do Exame</label>
           <input
-            type="text" id="date" value={appointmentDate}
+            type="text"
+            id="date"
+            value={EVENT_DATE_DISPLAY}
             className="mt-1 block w-full px-4 py-2 bg-gray-200 border border-gray-300 rounded-md shadow-sm text-gray-500 cursor-not-allowed"
             disabled
           />
         </div>
+
+        {/* Campo de Horário */}
         <div>
-          <label className="flex items-center gap-2 text-sm font-medium text-gray-700"><Clock size={16} />Escolha um Horário</label>
+          <label className="flex items-center gap-2 text-sm font-medium text-gray-700"><Clock size={16} />Escolha um Horário (11:00 - 16:00)</label>
           <div className="mt-2 grid grid-cols-3 sm:grid-cols-4 gap-2">
             {timeSlots.map((time) => (
-              <button
-                key={time} type="button" onClick={() => setSelectedTime(time)}
-                className={`px-4 py-2 rounded-md text-sm font-semibold transition-colors duration-200 ${
-                  selectedTime === time 
-                  ? 'bg-yellow-400 text-gray-900 ring-2 ring-yellow-500' 
-                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                }`}
-              >
+              <button key={time} type="button" onClick={() => setSelectedTime(time)} className={`px-4 py-2 rounded-md text-sm font-semibold transition-colors duration-200 ${selectedTime === time ? 'bg-yellow-400 text-gray-900 ring-2 ring-yellow-500' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}>
                 {time}
               </button>
             ))}
           </div>
         </div>
-        <button
-          type="submit" disabled={isLoading}
-          className="w-full flex items-center justify-center gap-3 py-3 px-4 bg-yellow-500 text-gray-900 font-bold rounded-md shadow-lg hover:bg-yellow-600 transition-all duration-300 disabled:bg-gray-400 disabled:cursor-wait"
-        >
+        
+        {error && <div className="text-red-600 bg-red-100 p-3 rounded-md text-center font-medium">{error}</div>}
+        {success && <div className="text-green-600 bg-green-100 p-3 rounded-md text-center font-medium">{success}</div>}
+
+        <button type="submit" disabled={isLoading} className="w-full flex items-center justify-center gap-3 py-3 px-4 bg-yellow-500 text-gray-900 font-bold rounded-md shadow-lg hover:bg-yellow-600 transition-all duration-300 disabled:bg-gray-400 disabled:cursor-wait">
           <Send size={20} />
           {isLoading ? 'Agendando...' : 'Confirmar Agendamento'}
         </button>
