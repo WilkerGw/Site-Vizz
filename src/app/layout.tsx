@@ -19,7 +19,6 @@ export default function RootLayout({
   return (
     <html lang="pt-BR" className="h-full">
       <body className={`${inter.className} bg-gray-50 flex flex-col min-h-full`}>
-        {/* Removido o 'overflow-x-hidden' daqui para permitir que o carrossel funcione */}
         <div className="flex flex-col flex-grow">
           <Header />
           <main>{children}</main>

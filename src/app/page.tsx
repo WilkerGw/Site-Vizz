@@ -1,4 +1,3 @@
-// frontend/src/app/page.tsx
 
 import { ContactSection } from "../components/home/ContactSection";
 import { CustomerReviewsSection } from "../components/home/CustomerReviewsSection";
