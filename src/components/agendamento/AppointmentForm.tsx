@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Calendar, Clock, User, Phone, Send } from 'lucide-react';
-import InputMask from 'react-input-mask'; // 1. Importe o componente da máscara
+import InputMask from 'react-input-mask';
 
 // Constantes da data do evento
 const EVENT_DATE_DISPLAY = "19/07/2025";
@@ -13,7 +13,7 @@ const generateTimeSlots = (): string[] => {
   const slots: string[] = [];
   const startTime = new Date(`${EVENT_DATE_ISO}T11:00:00`);
   const endTime = new Date(`${EVENT_DATE_ISO}T16:00:00`);
-  
+
   let currentTime = startTime;
   while (currentTime <= endTime) {
     slots.push(currentTime.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }));
@@ -32,8 +32,6 @@ export function AppointmentForm() {
   const [success, setSuccess] = useState<string | null>(null);
 
   const timeSlots = generateTimeSlots();
-  
-  // A função handlePhoneChange não é mais necessária! A máscara cuida da formatação.
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -54,8 +52,6 @@ export function AppointmentForm() {
       return;
     }
 
-    // 2. Removemos os caracteres da máscara antes de enviar para o backend.
-    // O backend deve receber apenas os números. Ex: "11987654321"
     const numericPhone = phone.replace(/\D/g, '');
 
     const appointmentDateTime = new Date(`${EVENT_DATE_ISO}T${selectedTime}:00`);
@@ -63,10 +59,10 @@ export function AppointmentForm() {
     const appointmentData = {
       firstName,
       lastName,
-      phone: numericPhone, // Enviando o telefone limpo
+      phone: numericPhone,
       dateTime: appointmentDateTime.toISOString(),
     };
-    
+
     try {
       const response = await fetch(`${apiUrl}/agendamentos`, {
         method: 'POST',
@@ -78,11 +74,11 @@ export function AppointmentForm() {
         const responseData = await response.json();
         throw new Error(responseData.error || 'Falha ao agendar. Tente novamente.');
       }
-      
+
       setSuccess('Agendamento realizado com sucesso!');
-      setFirstName(''); 
-      setLastName(''); 
-      setPhone(''); 
+      setFirstName('');
+      setLastName('');
+      setPhone('');
       setSelectedTime('');
 
     } catch (err: any) {
@@ -100,12 +96,23 @@ export function AppointmentForm() {
       transition={{ duration: 0.7, ease: 'easeOut' }}
     >
       <form onSubmit={handleSubmit} className="space-y-6">
-        {/* ... outros campos do formulário ... */}
 
-        {/* --- CAMPO DE TELEFONE COM MÁSCARA --- */}
+        {/* --- CORREÇÃO: CAMPOS DE NOME E SOBRENOME RESTAURADOS --- */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <label htmlFor="firstName" className="flex items-center gap-2 text-sm font-medium text-gray-700"><User size={16} />Nome</label>
+            <input type="text" id="firstName" value={firstName} onChange={(e) => setFirstName(e.target.value)} className="mt-1 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-yellow-500 focus:border-yellow-500" required />
+          </div>
+          <div>
+            <label htmlFor="lastName" className="block text-sm font-medium text-gray-700">Sobrenome</label>
+            <input type="text" id="lastName" value={lastName} onChange={(e) => setLastName(e.target.value)} className="mt-1 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-yellow-500 focus:border-yellow-500" required />
+          </div>
+        </div>
+        {/* ----------------------------------------------------------- */}
+
+        {/* Campo de Telefone com Máscara */}
         <div>
           <label htmlFor="phone" className="flex items-center gap-2 text-sm font-medium text-gray-700"><Phone size={16} />Telefone / WhatsApp</label>
-          {/* 3. Substituímos o <input> padrão pelo <InputMask> */}
           <InputMask
             mask="(99) 99999-9999"
             id="phone"
@@ -115,9 +122,7 @@ export function AppointmentForm() {
             required
           />
         </div>
-        
-        {/* ... restante do formulário ... */}
-        
+
         {/* Campo de Data Fixa */}
         <div>
           <label htmlFor="date" className="flex items-center gap-2 text-sm font-medium text-gray-700"><Calendar size={16} />Data do Exame</label>
@@ -141,7 +146,7 @@ export function AppointmentForm() {
             ))}
           </div>
         </div>
-        
+
         {error && <div className="text-red-600 bg-red-100 p-3 rounded-md text-center font-medium">{error}</div>}
         {success && <div className="text-green-600 bg-green-100 p-3 rounded-md text-center font-medium">{success}</div>}
 
