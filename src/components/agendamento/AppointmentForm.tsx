@@ -108,9 +108,7 @@ export function AppointmentForm() {
             <input type="text" id="lastName" value={lastName} onChange={(e) => setLastName(e.target.value)} className="mt-1 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-yellow-500 focus:border-yellow-500" required />
           </div>
         </div>
-        {/* ----------------------------------------------------------- */}
 
-        {/* Campo de Telefone com Máscara */}
         <div>
           <label htmlFor="phone" className="flex items-center gap-2 text-sm font-medium text-gray-700"><Phone size={16} />Telefone / WhatsApp</label>
           <InputMask
@@ -123,7 +121,6 @@ export function AppointmentForm() {
           />
         </div>
 
-        {/* Campo de Data Fixa */}
         <div>
           <label htmlFor="date" className="flex items-center gap-2 text-sm font-medium text-gray-700"><Calendar size={16} />Data do Exame</label>
           <input
@@ -135,7 +132,6 @@ export function AppointmentForm() {
           />
         </div>
 
-        {/* Campo de Horário */}
         <div>
           <label className="flex items-center gap-2 text-sm font-medium text-gray-700"><Clock size={16} />Escolha um Horário (11:00 - 16:00)</label>
           <div className="mt-2 grid grid-cols-3 sm:grid-cols-4 gap-2">
