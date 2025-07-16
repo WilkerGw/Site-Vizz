@@ -18,17 +18,13 @@ const socialLinks = [
   { name: 'WhatsApp', href: 'https://wa.me/551123628799', icon: MessageCircle },
 ];
 
-/**
- * Componente de Rodapé (Footer)
- * Convertido para TypeScript e Tailwind CSS.
- */
+
 export function Footer() {
   return (
     <footer className="bg-[#1a1a1a] text-gray-400 pt-16">
       <div className="container mx-auto max-w-6xl px-4">
         <div className="grid grid-cols-1 md:grid-cols-[1.5fr_1fr_1fr] gap-12 text-center md:text-left">
           
-          {/* Coluna 1: Logo e Sobre */}
           <div className="flex flex-col items-center md:items-start">
             <Link href="#home" className="mb-4">
               <Image
@@ -44,7 +40,6 @@ export function Footer() {
             </p>
           </div>
 
-          {/* Coluna 2: Navegação */}
           <div className="flex flex-col items-center md:items-start">
             <h4 className="text-lg font-semibold text-white mb-6 relative">
               Navegação
@@ -61,7 +56,6 @@ export function Footer() {
             </ul>
           </div>
 
-          {/* Coluna 3: Contato */}
           <div className="flex flex-col items-center md:items-start">
             <h4 className="text-lg font-semibold text-white mb-6 relative">
               Contato
@@ -90,7 +84,6 @@ export function Footer() {
 
         </div>
 
-        {/* Barra de Copyright */}
         <div className="mt-12 border-t border-gray-800 py-6 flex flex-col md:flex-row justify-between items-center text-center gap-4 text-sm">
           <p>&copy; {new Date().getFullYear()} Ótica Vizz. Todos os direitos reservados.</p>
           <a href="https://portfolio-wilker-frontend.vercel.app/" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors duration-300">
