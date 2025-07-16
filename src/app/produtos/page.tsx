@@ -1,6 +1,6 @@
 // frontend/src/app/produtos/page.tsx
 
-import { ProductCard } from "@/components/ui/ProductCard";
+import { ProductCard } from "../../components/ui/ProductCard";
 
 const mockProducts = [
   {
