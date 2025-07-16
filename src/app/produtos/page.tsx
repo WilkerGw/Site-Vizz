@@ -1,4 +1,3 @@
-// frontend/src/app/produtos/page.tsx
 
 import { ProductCard } from "../../components/ui/ProductCard";
 
@@ -57,12 +56,13 @@ export default function ProdutosPage() {
         Explore nossa coleção de armações e óculos de sol.
       </p>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+
         {mockProducts.map((product) => (
           <ProductCard
             key={product.id}
             name={product.name}
-            price={product.price}
+            price={String(product.price)}
             imageUrl={product.imageUrl}
           />
         ))}
