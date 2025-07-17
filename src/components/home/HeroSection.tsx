@@ -42,7 +42,6 @@ export function HeroSection() {
 
   return (
     <section className="relative flex flex-col items-center justify-center min-h-screen p-4 text-gray-100 overflow-hidden">
-      {/* --- INÍCIO DA CORREÇÃO DA IMAGEM --- */}
       <Image
         src="/images/background.jpg"
         alt="Background de uma ótica"
@@ -51,19 +50,18 @@ export function HeroSection() {
         className="-z-10 object-cover brightness-50"
         sizes="100vw"
       />
-      {/* --- FIM DA CORREÇÃO DA IMAGEM --- */}
 
       <OverlayFilter />
 
-      <div className="absolute top-0 left-0 right-0 z-20 flex justify-center p-4 mt-4">
-        <form onSubmit={handleSearch} className="w-full max-w-md">
+      <div className="absolute top-12 left-0 right-0 z-20 flex justify-center lg:justify-end p-4 mt-4">
+        <form onSubmit={handleSearch} className="w-full max-w-md ">
           <div className="relative">
             <input
               type="search"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Encontre sua armação ou óculos de sol..."
-              className="w-full h-12 pl-12 pr-4 rounded-full text-white placeholder:text-gray-300 bg-white/10 border border-white/20 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-yellow-400"
+              className="w-full h-12 pl-12 pr-4 rounded-full text-white placeholder:text-gray-300 bg-white/10 border border-white/20 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-yellow-400 lg:h-8"
             />
             <button
               type="submit"
@@ -85,7 +83,7 @@ export function HeroSection() {
             className="w-full h-auto"
           />
         </div>
-        <h1 className="text-3xl md:text-5xl font-bold leading-tight max-w-3xl text-shadow-md">
+        <h1 className="text-2xl md:text-4xl font-bold leading-tight max-w-3xl text-shadow-md">
           PREÇO <span className="text-yellow-400">JUSTO</span> E QUALIDADE{" "}
           <span className="text-yellow-400">GARANTIDA</span>
         </h1>
