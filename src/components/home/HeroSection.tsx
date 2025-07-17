@@ -107,7 +107,7 @@ export function HeroSection() {
         <div className="flex flex-col md:flex-row items-center justify-center gap-4 md:gap-6 mt-4 w-full">
           <Link
             href="/agendamento"
-            className="group relative flex items-center gap-4 w-full max-w-sm md:w-auto justify-center px-6 py-3 rounded-xl bg-gradient-to-r from-yellow-400 to-yellow-300 text-gray-800 font-semibold shadow-lg transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl"
+            className="group relative flex items-center gap-4 w-full max-w-sm md:w-auto justify-center px-6 py-3 rounded-xl bg-gradient-to-r from-yellow-400 to-yellow-300 text-gray-800 font-semibold shadow-lg transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl overflow-x-hidden"
           >
             <div className="absolute top-0 -left-full h-full w-3/4 skew-x-[-25deg] bg-white/20 transition-all duration-700 group-hover:left-full"></div>
             <Calendar size={24} />
