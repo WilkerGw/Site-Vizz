@@ -14,12 +14,11 @@
     mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);
   }
 
-  /* Esconde a barra de rolagem de forma cross-browser */
   .no-scrollbar::-webkit-scrollbar {
     display: none;
   }
   .no-scrollbar {
-    -ms-overflow-style: none; /* IE and Edge */
-    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; 
+    scrollbar-width: none; 
   }
 }

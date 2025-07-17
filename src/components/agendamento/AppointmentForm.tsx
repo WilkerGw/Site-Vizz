@@ -5,7 +5,6 @@ import { motion } from 'framer-motion';
 import { Calendar, Clock, User, Phone, Send } from 'lucide-react';
 import InputMask from 'react-input-mask';
 
-// Constantes da data do evento
 const EVENT_DATE_DISPLAY = "19/07/2025";
 const EVENT_DATE_ISO = "2025-07-19";
 
@@ -97,7 +96,6 @@ export function AppointmentForm() {
     >
       <form onSubmit={handleSubmit} className="space-y-6">
 
-        {/* --- CORREÇÃO: CAMPOS DE NOME E SOBRENOME RESTAURADOS --- */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
             <label htmlFor="firstName" className="flex items-center gap-2 text-sm font-medium text-gray-700"><User size={16} />Nome</label>
